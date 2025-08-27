@@ -148,4 +148,7 @@ projeto/
 ## Observações Técnicas
 
 ### Utilização de IA 
-Utilizei IA para configurar a parte do minio no docker_compose, na parte do mapeamento dos campos da tabela no script carga_postgre usei para consegui mapear os campos que mudavam o nome de acordo com arquivo exemplo ['QT_VOTOS', 'QTDE_VOTOS', 'QT_VOTOS_NOMINAIS', 'QT_VOTOS_TOTAL'] e formatação do README.
+Durante o desenvolvimento deste pipeline, utilizei assistência de IA nas seguintes áreas específicas:
+Configuração de infraestrutura: Configuração do MinIO no docker-compose.yml, incluindo variáveis de ambiente e health checks necessários.
+Mapeamento dinâmico de campos: Desenvolvimento da lógica de normalização de colunas no script de carga PostgreSQL, especificamente para lidar com inconsistências nos nomes dos campos entre diferentes arquivos CSV do TSE (exemplo: 'QT_VOTOS', 'QTDE_VOTOS', 'QT_VOTOS_NOMINAIS', 'QT_VOTOS_TOTAL' representam o mesmo conceito).
+Documentação: Estruturação do README.md com seções organizadas e formatação adequada, além da criação do diagrama de arquitetura em Mermaid.
