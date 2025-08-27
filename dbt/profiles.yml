@@ -1,0 +1,13 @@
+eleicoes_analytics:
+  outputs:
+    dev:
+      type: postgres
+      host: postgres
+      user: airflow
+      password: airflow123
+      port: 5432
+      dbname: eleicoes_dw
+      schema: public  
+      threads: 4
+      search_path: public,staging,marts
+  target: dev

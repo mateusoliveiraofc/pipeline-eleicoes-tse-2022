@@ -1,0 +1,161 @@
+version: 2
+
+sources:
+  - name: staging
+    tables:
+      - name: staging_eleicoes
+        description: "Tabela raw com dados do TSE carregados"
+        columns:
+          - name: qt_votos
+            description: "Quantidade de votos"
+            tests:
+              - not_null
+
+models:
+  # Modelos de Staging
+  - name: stg_eleicoes
+    description: "Dados eleitorais limpos e preparados"
+    columns:
+      - name: turno
+        description: "Número do turno eleitoral"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2]
+      
+      - name: uf
+        description: "Sigla da Unidade Federativa"
+        tests:
+          - not_null
+      
+      - name: nome_municipio
+        description: "Nome do município"
+        tests:
+          - not_null
+      
+      - name: codigo_cargo
+        description: "Código do cargo eleitoral"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 3, 5]  
+      
+      - name: numero_candidato
+        description: "Número do candidato na urna"
+        tests:
+          - not_null
+      
+      - name: quantidade_votos
+        description: "Quantidade de votos recebidos"
+        tests:
+          - not_null
+      
+      - name: tipo_voto
+        description: "Classificação do tipo de voto"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Nominal', 'Branco', 'Nulo']
+
+  # Tabela Fato Principal  
+  - name: fct_eleicao
+    description: "Tabela fato principal com grão: votos por candidato/município/cargo"
+    columns:
+      - name: turno
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2]
+      
+      - name: uf
+        tests:
+          - not_null
+      
+      - name: codigo_municipio
+        tests:
+          - not_null
+      
+      - name: nome_cargo
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Presidente', 'Governador', 'Senador']
+      
+      - name: quantidade_votos
+        tests:
+          - not_null
+      
+      - name: percentual_votos_municipio
+        description: "Percentual de votos no município"
+        tests:
+          - not_null
+      
+      - name: ranking_municipio
+        description: "Ranking do candidato no município"
+        tests:
+          - not_null
+
+  # Marts (Tabelas Agregadas)
+  - name: mart_resultado_geral_br
+    description: "Resultado nacional para Presidente"
+    columns:
+      - name: turno
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2]
+      
+      - name: ranking_nacional
+        tests:
+          - not_null
+      
+      - name: total_votos
+        tests:
+          - not_null
+      
+      - name: percentual_nacional
+        tests:
+          - not_null
+
+  - name: mart_resultado_por_estado
+    description: "Resultado por estado para Presidente e Governador"
+    columns:
+      - name: uf
+        tests:
+          - not_null
+      
+      - name: nome_cargo
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Presidente', 'Governador']
+      
+      - name: total_votos_estado
+        tests:
+          - not_null
+      
+      - name: percentual_no_estado
+        tests:
+          - not_null
+
+  - name: mart_resultado_por_municipio
+    description: "Resultado detalhado por município"
+    columns:
+      - name: codigo_municipio
+        tests:
+          - not_null
+      
+      - name: nome_municipio
+        tests:
+          - not_null
+      
+      - name: total_votos_municipio
+        tests:
+          - not_null
+      
+      - name: vencedor_municipio
+        description: "Flag indicando se é o candidato vencedor no município"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]

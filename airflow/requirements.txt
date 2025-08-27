@@ -1,0 +1,7 @@
+pandas==2.0.3
+requests==2.31.0
+psycopg2-binary==2.9.7
+sqlalchemy==1.4.49
+minio==7.1.17
+boto3==1.28.62
+dbt-postgres==1.6.0
